@@ -2,21 +2,24 @@
 #include <vector>
 #include <initializer_list>
 #include "Bit.h"
+#include <algorithm>
 
 class BinaryVector {
 protected:
     std::vector<Bit> bits;
 public:
-    // Các constructor
     BinaryVector(const std::vector<Bit>& b);
     BinaryVector(int size);
-    BinaryVector(std::initializer_list<int> list); // Hỗ trợ khởi tạo nhanh: {1, 0, 1}
+    BinaryVector(std::initializer_list<int> list);
     
     int size() const;
     Bit getBit(int index) const;
     
-    // Nối thêm 1 vector khác (dùng để tạo từ mã hệ thống)
     void append(const BinaryVector& other);
+
+    void reverse() {
+        std::reverse(bits.begin(), bits.end());
+    }
     
     void print() const;
 };
