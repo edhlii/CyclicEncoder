@@ -1,123 +1,97 @@
 # Cyclic Encoder
 
-A C++ implementation of a cyclic code encoder that simulates error-correcting cyclic code circuits. This project demonstrates the encoding process of cyclic codes, which are an important class of linear codes used in error detection and correction systems.
+A small C++ project that demonstrates encoding with cyclic codes (polynomial arithmetic over GF(2)). It includes a console encoder and a helper program `web_encoder` used by the web UI under `web/`.
 
-## Overview
+## Demo
 
-Cyclic codes are linear block codes with the property that every cyclic shift of a codeword is also a codeword. This implementation provides a practical demonstration of how cyclic codes encode messages into codewords using polynomial arithmetic over GF(2) (the Galois Field with two elements).
+![image](image.png)
+
+![image](image-1.png)
+
+![image](image-2.png)
+
+![image](image-3.png)
+
+![image](image-4.png)
 
 ## Project Structure
 
 ```
 CyclicEncoder/
-├── main.cpp              # Interactive user interface
-├── CyclicEncoder.h       # Cyclic encoder class declaration
-├── CyclicEncoder.cpp     # Cyclic encoder implementation
-├── BinaryVector.h        # Binary vector class declaration
-├── BinaryVector.cpp      # Binary vector implementation
-├── Bit.h                 # Bit class with GF(2) operations
-├── Bit.cpp               # Bit implementation
-└── README.md             # This file
+├── Bit.h, Bit.cpp
+├── BinaryVector.h, BinaryVector.cpp
+├── CyclicEncoder.h, CyclicEncoder.cpp
+├── main.cpp          # interactive console demo
+├── web_main.cpp      # produces JSON output for web UI (builds to `web_encoder`)
+├── tests/            # sample inputs and test runners
+└── web/              # simple Node.js web UI that talks to `web_encoder`
 ```
 
-## Components
+## Building
 
-### Bit Class
-- Represents a single bit (0 or 1)
-- Implements arithmetic operations in GF(2) (Galois Field of two elements):
-  - Addition (XOR)
-  - Subtraction (equivalent to addition in GF(2))
-  - Multiplication (AND)
-  - Division
+Prerequisites:
+- A C++ compiler supporting C++17 (g++, clang, or MSVC)
 
-### BinaryVector Class
-- Represents a vector of bits (polynomials in binary representation)
-- Supports:
-  - Construction from vectors, size specifications, or initializer lists
-  - Bit access and manipulation
-  - Vector concatenation (for systematic code construction)
-  - Printing/display of binary vectors
+From the project root, build the console demo or the web helper as follows.
 
-### CyclicEncoder Class
-- Implements the cyclic encoding algorithm
-- Takes parameters:
-  - `n`: length of the codeword
-  - `k`: length of the message (information bits)
-  - `g`: generator polynomial
-- Encodes a message into a codeword using polynomial division over GF(2)
+g++ / clang (MinGW, WSL, Linux):
+```bash
+g++ -std=c++17 -O2 -o cyclic_encoder main.cpp Bit.cpp BinaryVector.cpp CyclicEncoder.cpp
+g++ -std=c++17 -O2 -o web_encoder web_main.cpp Bit.cpp BinaryVector.cpp CyclicEncoder.cpp
+```
+
+MSVC (Developer Command Prompt):
+```cmd
+cl /EHsc /std:c++17 main.cpp Bit.cpp BinaryVector.cpp CyclicEncoder.cpp /Fe:cyclic_encoder.exe
+cl /EHsc /std:c++17 web_main.cpp Bit.cpp BinaryVector.cpp CyclicEncoder.cpp /Fe:web_encoder.exe
+```
+
+Quick Windows batch (example) — `build_web.bat`:
+```bat
+@echo off
+g++ -std=c++17 -O2 -o web_encoder web_main.cpp Bit.cpp BinaryVector.cpp CyclicEncoder.cpp
+if %ERRORLEVEL% neq 0 pause
+```
 
 ## Usage
 
-Run the program and follow the interactive prompts:
-
-```
-1. Enter the codeword length (n)
-2. Enter the message length (k)
-3. Enter the generator polynomial g(x) as a binary string
-   - Example: 1+x+x³ is entered as "1101"
-4. Enter the message m(x) as a binary string with length k
-```
-
-The program will:
-- Validate the input lengths
-- Display the encoding parameters
-- Show the encoding process
-- Output the resulting codeword c(x)
-
-### Example
-
-```
-Enter codeword length (n): 7
-Enter message length (k): 4
-Enter generator polynomial g(x) as binary string: 1011
-Enter message m(x) of length 4: 1101
-
-Generator polynomial g(x): 1011
-Message m(x): 1101
-Generated codeword c(x): 1101001
-```
-
-## Key Features
-
-- **GF(2) Arithmetic**: Correct implementation of Galois Field arithmetic for polynomial operations
-- **Systematic Encoding**: Produces systematic codewords where the message bits appear in the codeword
-- **Validation**: Input validation for message length and polynomial format
-- **User-Friendly Interface**: Interactive prompts guide users through the encoding process
-- **Educational Value**: Clear, well-structured code suitable for learning cyclic code concepts
-
-## Building and Compilation
-
-### Prerequisites
-- C++ compiler (C++11 or later)
-- Standard library support
-
-### Compilation
-```bash
-g++ -o cyclic_encoder *.cpp
-```
-
-### Running
+- Console demo:
 ```bash
 ./cyclic_encoder
+# or on Windows
+cyclic_encoder.exe
 ```
 
-## Mathematical Background
+- `web_encoder` (JSON output used by `web/server.js`):
+```bash
+./web_encoder <n> <k> <g_str> <m_str>
+# Example:
+./web_encoder 7 4 1011 1101
+```
+This prints a single JSON object describing the encoding steps, remainder, and final codeword.
 
-Cyclic codes use polynomial arithmetic modulo 2 to encode messages:
-- A message m(x) is multiplied by x^(n-k)
-- The result is divided by the generator polynomial g(x)
-- The remainder is combined with the message to form the codeword
+## Web UI
 
-For a C(n, k) cyclic code:
-- n = codeword length
-- k = message length
-- r = n - k = number of parity bits
+The `web/` folder contains a minimal Node.js server and static frontend that uses `web_encoder` to compute and display results. To run the web UI:
 
-## Notes
+```bash
+# install dependencies
+cd web
+npm install
+# start server
+node server.js
+```
 
-- The program uses Vietnamese language for user interface prompts and output
-- All binary arithmetic operations are performed in GF(2)
-- The implementation demonstrates both theoretical concepts and practical encoding mechanisms
+The server expects `web_encoder` to be available on `PATH` or in the project root; adjust `server.js` if you placed the binary elsewhere.
+
+## Tests
+
+Sample inputs are in `tests/`. Use the provided scripts to run them on Windows:
+
+```powershell
+.\run_tests.bat
+.\run_tests.ps1
+```
 
 ## Authors
 
