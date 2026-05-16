@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Phỏng Mạch Mã Hóa Vòng (Cyclic Encoder)</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-microchip"></i> Mô Phỏng Mạch Mã Hóa Vòng</h1>
+            <p>Sinh mã vòng hệ thống C(n, k) bằng thanh ghi dịch phản hồi tuyến tính (LFSR)</p>
+        </header>
+
+        <main>
+            <section class="input-section card">
+                <h2><i class="fas fa-keyboard"></i> Nhập Thông Số</h2>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="n-val">Chiều dài từ mã (n):</label>
+                        <input type="number" id="n-val" value="7" min="2">
+                    </div>
+                    <div class="input-group">
+                        <label for="k-val">Chiều dài bản tin (k):</label>
+                        <input type="number" id="k-val" value="4" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="g-val">Đa thức sinh g(x) (nhị phân):</label>
+                        <input type="text" id="g-val" value="1011" placeholder="Vd: 1011">
+                    </div>
+                    <div class="input-group">
+                        <label for="m-val">Bản tin m(x) (nhị phân):</label>
+                        <input type="text" id="m-val" value="1010" placeholder="Vd: 1010">
+                    </div>
+                </div>
+                <button id="btn-encode" class="btn primary"><i class="fas fa-cogs"></i> Chạy Mô Phỏng</button>
+                <div id="error-msg" class="error hidden"></div>
+            </section>
+
+            <div id="result-container" class="hidden">
+                <section class="circuit-section card">
+                    <h2><i class="fas fa-project-diagram"></i> Mạch Mã Hóa Hoàn Chỉnh</h2>
+                    <div class="circuit-wrapper" id="circuit-diagram">
+                        <!-- Mạch sẽ được render ở đây -->
+                    </div>
+                    <div class="circuit-legend">
+                        <p><strong>K1:</strong> Khóa điều khiển đầu vào (Đóng ở nhịp 1..k, Mở ở nhịp k+1..n)</p>
+                        <p><strong>K2:</strong> Khóa điều khiển lối ra (Nhận Input ở nhịp 1..k, Nhận Regs ở nhịp k+1..n)</p>
+                    </div>
+                </section>
+
+                <section class="table-section card">
+                    <h2><i class="fas fa-table"></i> Bảng Trạng Thái (n Nhịp)</h2>
+                    <div class="table-responsive">
+                        <table id="state-table">
+                            <thead>
+                                <!-- Sẽ được sinh động -->
+                            </thead>
+                            <tbody>
+                                <!-- Sẽ được sinh động -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="solution-section card">
+                    <h2><i class="fas fa-book-open"></i> Lời Giải Tự Luận Chi Tiết</h2>
+                    <div id="step-by-step-text" class="solution-content">
+                        <!-- Lời giải sẽ được sinh động -->
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Hệ thống mô phỏng Mã Hóa Vòng</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
