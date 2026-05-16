@@ -30,8 +30,6 @@ int main() {
     CyclicEncoder encoder(n, k, g);
     BinaryVector codeword = encoder.encode(m);
 
-    // Output only the codeword (no debug info, no prompts)
-    // We need to output just the binary representation
     for (int i = 0; i < codeword.size(); ++i) {
         std::cout << codeword.getBit(i).getVal();
     }
